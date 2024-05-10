@@ -1,0 +1,78 @@
+'use client'
+import { useState } from 'react'
+
+export default function Home() {
+  const [todoItems, setTodoItems] = useState([
+    { name: 'complete tutorial', dueDate: '2024-3-1' },
+    { name: 'work out', dueDate: '2024-3-1' }
+  ])
+
+  const [completedItems, setCompletedItems] = useState ([
+   { name: 'start tutorial', dueDate: '2024-2-28' }, 
+  ])
+
+  const [newTask, setNewTask] = useState ('')
+  const [newDueDate, setNewDueDate] = useState ('')
+
+  const createTodo = () => {
+    setTodoItems([...todoItems, { name: newTask, dueDate: newDueDate }])
+    setNewTask('')
+    setNewDueDate('')
+  }
+  
+   const deleteTodo = (index) => {
+      const newTodos = [...todoItems]
+      newTodos.splice(index, 1)
+      setTodoItems(newTodos)
+  }
+  
+     const completeTodo = (index) => {
+        const item = todoItems[index]
+        deleteTodo(index)
+        setCompletedItems([...completedItems, item])
+  }
+
+  return (
+    <div className="panel">
+      <h1>Task Manager</h1>
+
+     <div className="inputSection">
+      <input 
+        type="text"
+        value={newTask}
+        onChange={(e) => setNewTask(e.target.value)}
+        className="todoInput" 
+        placeholder="Task Name" 
+      /> 
+      <input 
+        type="date" 
+        value={newDueDate}
+        onChange={(e) => setNewDueDate(e.target.value)}
+        className="dueDateInput" 
+      /> 
+
+      <button onClick={createTodo} className="createButton">Add</button>
+     </div>
+
+     <div className="todoItems"> 
+        {todoItems.map((item, index) => ( 
+          <div key={index} className="todoItem"> 
+           <div>{item.name}</div> 
+           <div>{item.dueDate}</div>
+           <button onClick={() => deleteTodo(index)} className="deleteButton">&times;</button>
+           <button onClick={() => completeTodo(index)} className="completeButton">&#10003;</button>
+          </div>
+          ))}
+     </div>
+
+     <div className="completedItems">
+          {completedItems.map((item, index) => (
+            <div key={index} className="completedItem"> 
+            <strike>{item.name}</strike>
+            <strike>{item.dueDate}</strike>
+            </div>
+            ))}
+     </div>
+  </div>
+  )
+}
